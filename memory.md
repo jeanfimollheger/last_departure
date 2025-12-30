@@ -1,57 +1,79 @@
-#CREATION de l'ENVIRONNEMENT VIRTUEL
+# CREATION de l'ENVIRONNEMENT VIRTUEL
+
 bash
 python3 -m venv venv
-#SOURCER l'environnement virtuel
+
+# SOURCER l'environnement virtuel
+
 bash
 source venv/bin/activate
-#Upgrade PIP
+
+# Upgrade PIP
+
 (venv)
 python -m pip install --upgrade pip
-#Install django
+
+# Install django
+
 (venv)
 pip install django
-#VERIFICATION de l'install
+
+# VERIFICATION de l'install
+
 (venv)
 django-admin --version
-#FIGER les dépendances
+
+# FIGER les dépendances
+
 (venv)
 pip freeze > requirements.txt
-#CREATION du PROJET holding
+
+# CREATION du PROJET holding
+
 (venv)
 django-admin startproject holding .
-#CREATION de l'APP accounts
+
+# CREATION de l'APP accounts
+
 (venv)
 python manage.py startapp accounts
 
 #CREATION du MODEL dans accounts CustomUser
-##accounts/models.py
+
+## accounts/models.py
+
 from django.contrib.auth.models import AbstractUser
 
 class CustomUser(AbstractUser):
 pass
-##accounts/models.py
+##accounts/models.py##
 
 DECLARATION dans les settings de la nouvelle app accounts
-##holding/settings.py
+
+## holding/settings.py
+
 INSTALLED_APPS = [
 ...,
 'accounts',
 ]
 DECLARATION du AUTH_USER_MODEL dans les settings
 AUTH_USER_MODEL = 'accounts.CustomUser'
-##holding/settings.py
+##holding/settings.py##
 
 Les PREMIERES MIGRATIONS
 python manage.py makemigrations
 python manage.py migrate
 
 ADMINISTRATION et SUPERUSER
-##accounts/admin.py
+
+## accounts/admin.py
+
 from django.contrib import admin
 from .models import CustomUser
 
 admin.site.register(CustomUser)
-##accounts/admin.py
+
+## accounts/admin.py
 
 CREATION du superuser
 (venv)
@@ -77,7 +99,20 @@ dans le directory (ici last_departure)
 (venv) git init
 sur le github de jeanfimollheger dans le repository concerné dans "code" copié le https
 (ici -> https://github.com/jeanfimollheger/last_departure.git)
-(venv) git remote add origin https://github.com/jeanfimollheger/last_departure.git
-(venv) git status
-(venv) git add .
+(venv) git init
+(venv) git add README.md
 (venv) git commit -m "first commit"
+(venv) git branch -M main
+(venv) git remote add origin https://github.com/jeanfimollheger/last_departure.git
+(venv) git push -u origin main
+
+# MISE EN PLACE du LOGIN et du LOGOUT
+
+" plan global :
+
+- les URLs d'autenthification
+- templates(login/base)
+- parametres dans holding/settings.py
+- test final "
+
+## AJOUTER les urls d'authentification
