@@ -219,3 +219,7 @@ path('', include('accounts.urls')),
 
 </body>
 </html>
+##########################################
+DEUXIEME APP : snippets
+Creation app
+settings INSTALLED_APPS
