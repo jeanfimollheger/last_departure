@@ -116,3 +116,106 @@ sur le github de jeanfimollheger dans le repository concerné dans "code" copié
 - test final "
 
 ## AJOUTER les urls d'authentification
+
+## holding/urls.py
+
+from django.contrib import admin
+from django.urls import path, include
+
+urlpatterns = [
+path('admin/', admin.site.urls),
+path('accounts/', include('django.contrib.auth.urls')),
+]
+##holding/urls.py##
+
+# CREATION du templates global
+
+A la racine templates/registration/login.html
+
+# CONFIGURATION des templates dans settings.py
+
+TEMPLATES = [
+{
+...
+'DIRS': [BASE_DIR / 'templates'],
+...
+},
+]
+
+# login.html
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Connexion</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+</head>
+<body class="container py-5">
+
+<h2>Connexion</h2>
+
+<form method="post">
+    {% csrf_token %}
+    {{ form.as_p }}
+    <button type="submit" class="btn btn-primary">Se connecter</button>
+</form>
+
+</body>
+</html>
+
+# CONFIGURATION PARAMETRES LOGIN et LOGOUT dans settings.py
+
+holding/settings.py
+LOGIN_URL = "/accounts/login/"
+LOGIN_REDIRECT_URL = "/"
+LOGOUT_REDIRECT_URL = "/accounts/login/"
+
+# CREATION VIEW home dans accounts/views.py
+
+from django.shortcuts import render
+from django.contrib.auth.decorators import login_required
+
+@login_required
+def home(request):
+return render(request, "accounts/home.html")
+
+# CREATION de urls.py dans accounts
+
+from django.urls import path, include
+from .views import home
+
+urlpatterns = [
+path("", home, name="home"),
+]
+
+# INTEGRATION de accounts/urls.py dans holding/urls.py
+
+from django.contrib import admin
+from django.urls import path, include
+
+urlpatterns = [
+path('admin/', admin.site.urls),
+path('accounts/', include('django.contrib.auth.urls')),
+path('', include('accounts.urls')),
+]
+
+# CREATION de home.html dans accounts/templates/accounts
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Home</title>
+</head>
+<body>
+ <h1>Bienvenue {{ user.username }}</h1>
+
+<p>Tu es connecté.</p>
+
+<a href="{% url 'logout' %}">Se déconnecter</a>
+
+</body>
+</html>
