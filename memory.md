@@ -1,6 +1,6 @@
 # CREATION de l'ENVIRONNEMENT VIRTUEL
 
-bash
+#bash
 python3 -m venv venv
 
 # SOURCER l'environnement virtuel
@@ -223,3 +223,44 @@ path('', include('accounts.urls')),
 DEUXIEME APP : snippets
 Creation app
 settings INSTALLED_APPS
+CREATION du model Snippet
+ADMINISTRATION du model Snippet
+... makemigrations
+... migrate
+
+# CLASS BASED VIEWS
+
+snippets/views.py
+
+## ListView
+
+from django.shortcuts import render
+from django.views.generic import ListView, DetailView, CreateView, UpdateView, DeleteView
+from .models import Snippet
+
+class SnippetListView(ListView):
+model = Snippet
+template_name = 'snippets/snippet_list.html'
+context_object_name = 'snippets'
+
+## urls de snippets/urls.py
+
+from django.urls import path
+from .views import SnippetListView, SnippetDetailView
+
+url_patterns = [
+path('', SnippetListView.as_view(), name='snippet_list'),
+path('<slug:slug>/', SnippetDetailView.as_view(), name='snippet_detail'),
+]
+
+## urls de holding/urls.py
+
+from django.contrib import admin
+from django.urls import path, include
+
+urlpatterns = [
+path('admin/', admin.site.urls),
+path('accounts/', include('django.contrib.auth.urls')),
+path('', include('accounts.urls')),
+path('snippets/', include('snippets.urls')),
+]

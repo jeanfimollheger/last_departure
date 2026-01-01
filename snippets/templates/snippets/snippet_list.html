@@ -1,0 +1,23 @@
+{% extends "base.html" %}
+
+{% block title %}Snippets{% endblock %}
+
+{% block content %}
+<h1>Snippets</h1>
+
+<ul class="list-group">
+    {% for snippet in snippets %}
+        <li class="list-group-item d-flex justify-content-between align-items-center">
+            {{ snippet.title }}
+            {% if snippet.order %}
+              (Order: {{ snippet.order }})
+            {% endif %}
+            <a class="btn btn-secondary" href="{% url 'snippet_detail' snippet.slug %}">
+                Detail
+            </a>
+        </li>
+    {% empty %}
+        <li class="list-group-item">Aucun snippet.</li>
+    {% endfor %}
+</ul>
+{% endblock %}

@@ -1,0 +1,41 @@
+{% extends "base.html" %}
+
+{% block title %}{{ snippet.title }}{% endblock %}
+
+{% block content %}
+<h1>{{ snippet.title }}</h1>
+
+<div class="position-relative">
+    <button
+        class="btn btn-sm btn-outline-secondary position-absolute top-0 end-0 m-2"
+        onclick="copySnippet()"
+        id="copy-btn"
+    >
+        Copier
+    </button>
+
+    <pre class="bg-light p-3"><code id="snippet-code">{{ snippet.code }}</code></pre>
+</div>
+
+<p>
+    Created at : {{ snippet.created_at }}
+    {% if snippet.order %} / Order : {{ snippet.order }} {% endif %}
+</p>
+
+<a href="{% url 'snippet_list' %}" class="btn btn-secondary mt-3">
+    Retour
+</a>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+function copySnippet() {
+    const code = document.getElementById("snippet-code").innerText;
+    navigator.clipboard.writeText(code).then(() => {
+        const btn = document.getElementById("copy-btn");
+        btn.innerText = "Copié !";
+        setTimeout(() => btn.innerText = "Copier", 1500);
+    });
+}
+</script>
+{% endblock %}
