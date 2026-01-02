@@ -1,0 +1,20 @@
+{% extends "base.html" %}
+
+{% block title %}Delete snippet{% endblock %}
+
+{% block content %}
+<h1>Supprimer le snippet</h1>
+
+<p>
+    Es-tu sûr de vouloir supprimer :
+    <strong>{{ object.title }}</strong> ?
+</p>
+
+<form method="post">
+    {% csrf_token %}
+    <button class="btn btn-danger">Oui, supprimer</button>
+    <a href="{% url 'snippet_detail' object.slug %}" class="btn btn-secondary">
+        Annuler
+    </a>
+</form>
+{% endblock %}

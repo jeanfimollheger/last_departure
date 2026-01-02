@@ -21,8 +21,16 @@
     Created at : {{ snippet.created_at }}
     {% if snippet.order %} / Order : {{ snippet.order }} {% endif %}
 </p>
+{% if request.user.is_superuser %}
+    <a class="btn btn-secondary" href="{% url 'snippet_update' snippet.slug %}" class="btn btn-warning mt-3">
+        Modifier
+    </a>
 
-<a href="{% url 'snippet_list' %}" class="btn btn-secondary mt-3">
+    <a class="btn btn-danger" href="{% url 'snippet_delete' snippet.slug %}" class="btn btn-danger mt-3">
+        Supprimer
+    </a>
+{% endif %}
+<a class="btn btn-secondary" href="{% url 'snippet_list' %}" class="btn btn-secondary mt-3">
     Retour
 </a>
 {% endblock %}

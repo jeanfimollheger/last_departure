@@ -39,3 +39,13 @@ class SnippetUpdateView(LoginRequiredMixin, UserPassesTestMixin, UpdateView):
 
     def test_func(self):
         return self.request.user.is_superuser
+
+class SnippetDeleteView(LoginRequiredMixin, UserPassesTestMixin, DeleteView):
+    model = Snippet
+    template_name = "snippets/snippet_confirm_delete.html"
+    slug_field = "slug"
+    slug_url_kwarg = "slug"
+    success_url = reverse_lazy("snippet_list")
+
+    def test_func(self):
+        return self.request.user.is_superuser

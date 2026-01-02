@@ -264,3 +264,73 @@ path('accounts/', include('django.contrib.auth.urls')),
 path('', include('accounts.urls')),
 path('snippets/', include('snippets.urls')),
 ]
+
+## DetailView
+
+class SnippetDetailView(DetailView):
+model = Snippet
+template_name = "snippets/snippet_detail.html"
+context_object_name = "snippet" # ces 2 lignes ci-dessous ne sont pas nécessaires mais expliquent # que l'attribut slug du model est le slug_field # et que dans l'url ce sera aussi slug
+slug_field = "slug"
+slug_url_kwarg = "slug"
+
+## detail_form.html
+
+{% extends "base.html" %}
+
+{% block title %}Snippet{% endblock %}
+
+{% block content %}
+
+<h1>{{ view.object|default:"New snippet" }}</h1>
+
+<form method="post">
+    {% csrf_token %}
+    {{ form.as_p }}
+    <button class="btn btn-secondary">Save</button>
+</form>
+{% endblock %}
+
+## RETOUCHE base.html
+
+A COMPLETER
+
+## CreateView
+
+class SnippetCreateView(LoginRequiredMixin, UserPassesTestMixin, CreateView):
+model = Snippet
+fields = ["title", "code", "order"]
+template_name = "snippets/snippet_form.html"
+success_url = reverse_lazy("snippet_list")
+
+    def test_func(self):
+        return self.request.user.is_superuser
+
+## UpdateView
+
+class SnippetUpdateView(LoginRequiredMixin, UserPassesTestMixin, UpdateView):
+model = Snippet
+fields = ["title", "code", "order"]
+template_name = "snippets/snippet_form.html"
+slug_field = "slug"
+slug_url_kwarg = "slug"
+success_url = reverse_lazy("snippet_list")
+
+    def test_func(self):
+        return self.request.user.is_superuser
+
+## Retouche snippet_detail.html
+
+A COMPLETER
+
+## Deleview
+
+class SnippetDeleteView(LoginRequiredMixin, UserPassesTestMixin, DeleteView):
+model = Snippet
+template_name = "snippets/snippet_confirm_delete.html"
+slug_field = "slug"
+slug_url_kwarg = "slug"
+success_url = reverse_lazy("snippet_list")
+
+    def test_func(self):
+        return self.request.user.is_superuser
