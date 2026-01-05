@@ -23,24 +23,31 @@ pip install django
 (venv)
 django-admin --version
 
-# FIGER les dépendances
+# FIGER les dépendances (7)
 
 (venv)
 pip freeze > requirements.txt
 
-# CREATION du PROJET holding
+# CREATION du PROJET holding (8)
 
 (venv)
 django-admin startproject holding .
 
-# CREATION de l'APP accounts
+# CREATION de l'APP accounts (9)
 
 (venv)
 python manage.py startapp accounts
 
 #CREATION du MODEL dans accounts CustomUser
 
-## accounts/models.py
+## holding/settings.py (10)
+
+INSTALLED_APPS = [
+...,
+'accounts',
+]
+
+## accounts/models.py (11)
 
 from django.contrib.auth.models import AbstractUser
 
@@ -50,12 +57,6 @@ pass
 
 DECLARATION dans les settings de la nouvelle app accounts
 
-## holding/settings.py
-
-INSTALLED_APPS = [
-...,
-'accounts',
-]
 DECLARATION du AUTH_USER_MODEL dans les settings
 AUTH_USER_MODEL = 'accounts.CustomUser'
 ##holding/settings.py##
@@ -110,7 +111,7 @@ sur le github de jeanfimollheger dans le repository concerné dans "code" copié
 
 " plan global :
 
-- les URLs d'autenthification
+- les URLs d'authentification
 - templates(login/base)
 - parametres dans holding/settings.py
 - test final "

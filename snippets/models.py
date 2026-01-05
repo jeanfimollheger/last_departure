@@ -10,7 +10,7 @@ class Snippet(models.Model):
     location = models.CharField(
         max_length=100,
         blank=True,
-        help_text="Où utiliser ce snippet (ex: shell, settings.py, views.py)"
+        help_text="Où utiliser ce snippet (ex: shell, venv, settings.py, views.py)"
     )
     description = models.TextField(
         blank=True,
