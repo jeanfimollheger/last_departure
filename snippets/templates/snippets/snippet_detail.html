@@ -5,6 +5,12 @@
 {% block content %}
 <h1>{{ snippet.title }}</h1>
 
+{% if snippet.location %}
+<p>
+    <strong>Où utiliser :</strong> {{ snippet.location }}
+</p>
+{% endif %}
+
 <div class="position-relative">
     <button
         class="btn btn-sm btn-outline-secondary position-absolute top-0 end-0 m-2"
@@ -16,6 +22,13 @@
 
     <pre class="bg-light p-3"><code id="snippet-code">{{ snippet.code }}</code></pre>
 </div>
+
+{% if snippet.description %}
+<div class="mt-3">
+    <h5>Explications</h5>
+    <p>{{ snippet.description|linebreaks }}</p>
+</div>
+{% endif %}
 
 <p>
     Created at : {{ snippet.created_at }}
