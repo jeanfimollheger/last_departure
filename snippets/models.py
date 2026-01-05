@@ -5,12 +5,22 @@ class Snippet(models.Model):
     title = models.CharField(max_length=100, unique=True)
     slug = models.SlugField(max_length=120, unique=True, blank=True)
     order = models.PositiveIntegerField(blank=True, null=True)
-
     code = models.TextField()
     created_at = models.DateTimeField(auto_now_add=True)
+    location = models.CharField(
+        max_length=100,
+        blank=True,
+        help_text="Où utiliser ce snippet (ex: shell, settings.py, views.py)"
+    )
+    description = models.TextField(
+        blank=True,
+        help_text="Commentaires et explications"
+    )
+    
 
     class Meta:
         ordering = ["order", "created_at"]
+
 
     def save(self, *args, **kwargs):
         if not self.slug:
