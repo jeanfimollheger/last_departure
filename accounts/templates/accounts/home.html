@@ -2,13 +2,13 @@
 
 {% block title %}Accueil{% endblock %}
 
-{% block content %} 
 <body>
+{% block content %} 
  <h1>Bienvenue {{ user.username }}</h1>
 
 <p>Tu es connecté.</p>
+<p>Le {{ date }}</p>
 
 <!-- <a href="{% url 'logout' %}">Se déconnecter</a> -->
 {% endblock %}
 </body>
-</html>
