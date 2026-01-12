@@ -1,0 +1,25 @@
+{% extends "base.html" %}
+
+{% block title %}Projects{% endblock %}
+
+{% block content %}
+<h1>My projects</h1>
+
+{% if projects %}
+    <ul class="list-group">
+        {% for project in projects %}
+            <li class="list-group-item d-flex justify-content-between align-items-center">
+                {{ project.name }}
+
+                {% if project.deadline %}
+                    <span class="badge bg-secondary">
+                        {{ project.deadline }}
+                    </span>
+                {% endif %}
+            </li>
+        {% endfor %}
+    </ul>
+{% else %}
+    <p>No project yet.</p>
+{% endif %}
+{% endblock %}

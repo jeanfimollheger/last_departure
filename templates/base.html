@@ -13,7 +13,8 @@
     <a class="navbar-brand" href="/">Home</a>
     <a class="navbar-brand" href="{% url 'snippet_list' %}">Snippets</a>
     <a class="navbar-brand" href="{% url 'snippet_create' %}">Create snippet</a>
-
+    <a class="navbar-brand" href="{% url 'project_list' %}">Projects</a>
+    
     <div class="collapse navbar-collapse">
       <ul class="navbar-nav ms-auto">
         {% if user.is_authenticated %}
