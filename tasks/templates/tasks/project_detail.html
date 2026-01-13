@@ -1,0 +1,42 @@
+{% extends "base.html" %}
+
+{% block title %}{{ project.name }}{% endblock %}
+
+{% block content %}
+<h1>{{ project.name }}</h1>
+
+<p>
+    {% if project.deadline %}
+        <strong>Deadline:</strong> {{ project.deadline }}
+    {% endif %}
+</p>
+
+<p>
+    <strong>Private:</strong>
+    {{ project.private|yesno:"Yes,No" }}
+</p>
+
+<hr>
+
+<h2>Tasks</h2>
+
+{% if project.tasks.all %}
+    <ul class="list-group">
+        {% for task in project.tasks.all %}
+            <li class="list-group-item d-flex justify-content-between">
+                {{ task.description }}
+
+                {% if task.done %}
+                    <span class="badge bg-success">Done</span>
+                {% endif %}
+            </li>
+        {% endfor %}
+    </ul>
+{% else %}
+    <p>No tasks yet.</p>
+{% endif %}
+
+<a href="{% url 'project_list' %}" class="btn btn-secondary mt-3">
+    Back to projects
+</a>
+{% endblock %}

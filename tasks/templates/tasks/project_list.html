@@ -9,8 +9,11 @@
     <ul class="list-group">
         {% for project in projects %}
             <li class="list-group-item d-flex justify-content-between align-items-center">
-                {{ project.name }}
-
+               {{ project.name }}
+<!-- ici ? -->
+                <a href="{% url 'project_detail' project.slug %}">
+                    {{ project.name }}
+                </a>
                 {% if project.deadline %}
                     <span class="badge bg-secondary">
                         {{ project.deadline }}

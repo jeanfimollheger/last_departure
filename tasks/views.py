@@ -11,3 +11,11 @@ class ProjectListView(ListView):
 
     def get_queryset(self):
         return Project.objects.filter(creator=self.request.user)
+    
+class ProjectDetailView(LoginRequiredMixin, DetailView):
+    model = Project
+    template_name = 'project_detail.html'
+    context_object_name = 'project'
+
+    def get_queryset(self):
+        return Project.objects.filter(creator=self.request.user)
