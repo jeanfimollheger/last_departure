@@ -8,8 +8,7 @@ class ProjectForm(forms.ModelForm):
         widgets = {
             "name": forms.TextInput(attrs={"class": "form-control"}),
             "deadline": forms.DateInput(attrs={
-                "type": "date",
-                "class": "form-control"
-            }),
+                "type": "date"},
+                format="%Y-%m-%d"),
             "private": forms.CheckboxInput(attrs={"class": "form-check-input"}),
         }

@@ -3,7 +3,13 @@
 {% block title %}New project{% endblock %}
 
 {% block content %}
-<h1>Create a project</h1>
+<h1>
+    {% if object %}
+        Update project
+    {% else %}
+        Create a project
+    {% endif %}
+</h1>
 
 <form method="post" class="mt-3">
     {% csrf_token %}
@@ -21,7 +27,13 @@
         </div>
     {% endfor %}
 
-    <button class="btn btn-primary">Create</button>
+    <button class="btn btn-primary">
+        {% if object %}
+            Update
+        {% else %}
+            Create
+        {% endif %}
+    </button>
     <a href="{% url 'project_list' %}" class="btn btn-secondary">Cancel</a>
 </form>
 {% endblock %}
