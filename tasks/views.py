@@ -1,11 +1,11 @@
-from django.shortcuts import render, get_object_or_404
+from django.shortcuts import render, get_object_or_404, redirect
 from django.core.exceptions import PermissionDenied
 from django.views.generic import ListView, DetailView, CreateView, UpdateView, DeleteView
+from django.views import View
 from .models import Task, Project
 from django.contrib.auth.mixins import LoginRequiredMixin
 from .forms import ProjectForm, TaskForm
 from django.urls import reverse_lazy, reverse
-
 class ProjectListView(ListView):
     model = Project
     template_name = 'tasks/project_list.html'
@@ -122,3 +122,21 @@ class TaskCreateView(LoginRequiredMixin, CreateView):
         context["project"] = self.project
         return context
 
+class TaskMarkDoneView(LoginRequiredMixin, View):
+
+    def post(self, request, slug):
+        task = get_object_or_404(Task, slug=slug)
+        project = task.project
+
+        # 🔐 règles de permissions
+        if project.private:
+            if request.user != project.creator:
+                raise PermissionDenied
+        else:
+            if request.user != project.creator and request.user != task.creator:
+                raise PermissionDenied
+
+        task.done = True
+        task.save()
+
+        return redirect("project_detail", slug=project.slug)
