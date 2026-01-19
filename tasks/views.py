@@ -1,9 +1,10 @@
-from django.shortcuts import render
+from django.shortcuts import render, get_object_or_404
+from django.core.exceptions import PermissionDenied
 from django.views.generic import ListView, DetailView, CreateView, UpdateView, DeleteView
 from .models import Task, Project
 from django.contrib.auth.mixins import LoginRequiredMixin
-from .forms import ProjectForm
-from django.urls import reverse_lazy
+from .forms import ProjectForm, TaskForm
+from django.urls import reverse_lazy, reverse
 
 class ProjectListView(ListView):
     model = Project
@@ -13,7 +14,46 @@ class ProjectListView(ListView):
 
     def get_queryset(self):
         return Project.objects.filter(creator=self.request.user)
-    
+
+    def dispatch(self, request, *args, **kwargs):
+        print("\n====== REQUEST ======")
+        print("path:", request.path)
+        print("method:", request.method)
+        print("kwargs:", self.kwargs)
+        print("args:", self.args)
+        print("GET:", request.GET)
+        print("POST:", request.POST)
+        print("user:", request.user)
+        print("model:", self.model)
+        print("user:", request.user.username)
+        print("\n=== ALL REQUEST ===")
+        for attr in dir(request):
+            if not attr.startswith("_"):
+                try:
+                    value = getattr(request, attr)
+                    print(attr, "=>", type(value))
+                except Exception as e:
+                    print(attr, "=> ERROR:", e)
+        print("=====================\n")
+        print("=====================\n")
+        print("\n======= FIN =_dict_======")
+        """
+        for k, v in request.__dict__.items():
+            print(k, "=>", type(v), v)
+        """
+        print("=====================\n")
+        return super().dispatch(request, *args, **kwargs)
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+
+        print("\n====== CONTEXT ======")
+        for k, v in context.items():
+            print(k, "=>", type(v), v)
+        print("=====================\n")
+
+        return context
+
 class ProjectDetailView(LoginRequiredMixin, DetailView):
     model = Project
     template_name = 'tasks/project_detail.html'
@@ -52,3 +92,33 @@ class ProjectDeleteView(LoginRequiredMixin, DeleteView):
 
     def get_queryset(self):
         return Project.objects.filter(creator=self.request.user)
+
+class TaskCreateView(LoginRequiredMixin, CreateView):
+    model = Task
+    form_class = TaskForm
+    template_name = "tasks/task_form.html"
+    #success_url = reverse_lazy("project_detail")
+    
+    def dispatch(self, request, *args, **kwargs):
+        self.project = get_object_or_404(Project, slug=kwargs['project_slug'])
+        if self.project.private and self.project.creator != request.user:
+            raise PermissionDenied("Project is private.")
+        return super().dispatch(request, *args, **kwargs)
+    
+    def form_valid(self, form):
+        form.instance.creator = self.request.user
+        form.instance.project = self.project
+        return super().form_valid(form)
+   
+    def get_success_url(self):
+        # Redirection vers le détail du projet
+        return reverse(
+            "project_detail",
+            kwargs={"slug": self.project.slug}
+        )
+    
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context["project"] = self.project
+        return context
+

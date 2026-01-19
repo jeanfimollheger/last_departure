@@ -1,0 +1,66 @@
+{% extends "base.html" %}
+
+{% block title %}Task – {{ task.description|truncatechars:30 }}{% endblock %}
+
+{% block content %}
+<div class="card">
+  <div class="card-body">
+
+    <h3 class="card-title">
+      Task
+      {% if task.done %}
+        <span class="badge bg-success ms-2">Done</span>
+      {% endif %}
+    </h3>
+
+    <p class="card-text mt-3">
+      {{ task.description }}
+    </p>
+
+    <ul class="list-group list-group-flush mt-3">
+      <li class="list-group-item">
+        <strong>Project :</strong>
+        <a href="{% url 'project_detail' task.project.slug %}">
+          {{ task.project.name }}
+        </a>
+      </li>
+
+      {% if task.deadline %}
+      <li class="list-group-item">
+        <strong>Deadline :</strong> {{ task.deadline }}
+      </li>
+      {% endif %}
+
+      {% if task.time %}
+      <li class="list-group-item">
+        <strong>Time :</strong> {{ task.time }} h
+      </li>
+      {% endif %}
+
+      <li class="list-group-item">
+        <strong>Area :</strong> {{ task.get_area_display }}
+      </li>
+
+      <li class="list-group-item">
+        <strong>Creator :</strong> {{ task.creator }}
+      </li>
+    </ul>
+
+    <div class="mt-4 d-flex gap-2">
+      {% if can_edit %}
+        <a href="{% url 'task_update' task.slug %}" class="btn btn-outline-primary">
+          Edit
+        </a>
+        <a href="{% url 'task_delete' task.slug %}" class="btn btn-outline-danger">
+          Delete
+        </a>
+      {% endif %}
+
+      <a href="{% url 'project_detail' task.project.slug %}" class="btn btn-secondary ms-auto">
+        Back to project
+      </a>
+    </div>
+
+  </div>
+</div>
+{% endblock %}

@@ -46,6 +46,10 @@
     <p>No tasks yet.</p>
 {% endif %}
 
+<a href="{% url 'task_create' project.slug %}" class="btn btn-primary mt-3">
+    Create task
+</a>
+<hr>
 <a href="{% url 'project_list' %}" class="btn btn-secondary mt-3">
     Back to projects
 </a>
