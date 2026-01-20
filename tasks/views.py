@@ -140,3 +140,28 @@ class TaskMarkDoneView(LoginRequiredMixin, View):
         task.save()
 
         return redirect("project_detail", slug=project.slug)
+    
+class TaskUpdateView(LoginRequiredMixin, UpdateView):
+    model = Task
+    form_class = TaskForm
+    template_name = "tasks/task_form.html"
+    context_object_name = "task"
+
+    def get_object(self, queryset=None):
+        task = get_object_or_404(Task, slug=self.kwargs["slug"])
+        project = task.project
+
+        if project.private:
+            if self.request.user != project.creator:
+                raise PermissionDenied
+        else:
+            if (
+                self.request.user != project.creator
+                and self.request.user != task.creator
+            ):
+                raise PermissionDenied
+
+        return task
+
+    def get_success_url(self):
+        return self.object.project.get_absolute_url()

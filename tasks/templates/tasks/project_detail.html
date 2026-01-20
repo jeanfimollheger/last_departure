@@ -30,26 +30,35 @@
 
 <h2>Tasks</h2>
 
-{% if project.tasks.all %}
-    <ul class="list-group">
+{% if project.tasks.exists %}
+    <ul class="list-group mb-3">
         {% for task in project.tasks.all %}
-            <li class="list-group-item d-flex justify-content-between">
-                {{ task.description }}
+            <li class="list-group-item d-flex justify-content-between align-items-center">
 
-                <!-- {% if task.done %} <span class="badge bg-success">Done</span> {% endif %} -->
-                
-                <form method="post" action="{% url 'task_done' task.slug %}">
-                    {% csrf_token %}
-                    {% if not task.done %}
-                        <button class="btn btn-sm btn-primary">
-                            Mark as done
-                        </button>
-                    {% else %}
-                        <button class="btn btn-sm btn-secondary" disabled>
-                            Already done
-                        </button>
+                {{ task.description }} // {{ task.deadline|default:"(no deadline)"}} // {{ task.time|default:"(no estimate)" }} H
+
+                <div class="btn-group">
+                    {% if user == project.creator or user == task.creator %}
+                        <a href="{% url 'task_update' task.slug %}"
+                           class="btn btn-sm btn-outline-primary">
+                            Edit
+                        </a>
                     {% endif %}
-                </form>
+
+                    <form method="post" action="{% url 'task_done' task.slug %}">
+                        {% csrf_token %}
+                        {% if not task.done %}
+                            <button class="btn btn-sm btn-primary">
+                                Mark as done
+                            </button>
+                        {% else %}
+                            <button class="btn btn-sm btn-secondary" disabled>
+                                Already done
+                            </button>
+                        {% endif %}
+                    </form>
+                </div>
+
             </li>
         {% endfor %}
     </ul>
@@ -57,11 +66,16 @@
     <p>No tasks yet.</p>
 {% endif %}
 
-<a href="{% url 'task_create' project.slug %}" class="btn btn-primary mt-3">
+<a href="{% url 'task_create' project.slug %}"
+   class="btn btn-primary mb-4">
     Create task
 </a>
 <hr>
-<a href="{% url 'project_list' %}" class="btn btn-secondary mt-3">
+<hr>
+
+<a href="{% url 'project_list' %}"
+   class="btn btn-secondary">
     Back to projects
 </a>
+
 {% endblock %}
